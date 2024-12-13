@@ -1,0 +1,452 @@
+{
+    "placedItems": [
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_0",
+            "priority": 2084.0,
+            "weight": 730,
+            "loadCapacity": 720.73,
+            "shape": {
+                "shapeType": "Box",
+                "width": 53,
+                "height": 99,
+                "depth": 99,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 519453
+            },
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "sequence": 0,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_0",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_1",
+            "priority": 2084.0,
+            "weight": 550,
+            "loadCapacity": 543.28,
+            "shape": {
+                "shapeType": "Box",
+                "width": 39,
+                "height": 86,
+                "depth": 88,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 295152
+            },
+            "x": 53,
+            "y": 0,
+            "z": 0,
+            "sequence": 1,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_1",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_2",
+            "priority": 2084.0,
+            "weight": 60,
+            "loadCapacity": 55.45,
+            "shape": {
+                "shapeType": "Box",
+                "width": 41,
+                "height": 75,
+                "depth": 1,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 3075
+            },
+            "x": 0,
+            "y": 0,
+            "z": 99,
+            "sequence": 2,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_2",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_3",
+            "priority": 2084.0,
+            "weight": 170,
+            "loadCapacity": 162.04,
+            "shape": {
+                "shapeType": "Box",
+                "width": 31,
+                "height": 77,
+                "depth": 11,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 26257
+            },
+            "x": 53,
+            "y": 0,
+            "z": 88,
+            "sequence": 3,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_3",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_4",
+            "priority": 2084.0,
+            "weight": 80,
+            "loadCapacity": 79.75,
+            "shape": {
+                "shapeType": "Box",
+                "width": 4,
+                "height": 53,
+                "depth": 30,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 6360
+            },
+            "x": 92,
+            "y": 0,
+            "z": 0,
+            "sequence": 4,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_4",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_5",
+            "priority": 2084.0,
+            "weight": 120,
+            "loadCapacity": 112.41,
+            "shape": {
+                "shapeType": "Box",
+                "width": 6,
+                "height": 39,
+                "depth": 54,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 12636
+            },
+            "x": 92,
+            "y": 0,
+            "z": 30,
+            "sequence": 5,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_5",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_6",
+            "priority": 2084.0,
+            "weight": 70,
+            "loadCapacity": 69.61,
+            "shape": {
+                "shapeType": "Box",
+                "width": 5,
+                "height": 57,
+                "depth": 17,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 4845
+            },
+            "x": 92,
+            "y": 39,
+            "z": 30,
+            "sequence": 6,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_6",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_7",
+            "priority": 2084.0,
+            "weight": 100,
+            "loadCapacity": 92.35,
+            "shape": {
+                "shapeType": "Box",
+                "width": 2,
+                "height": 82,
+                "depth": 52,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 8528
+            },
+            "x": 98,
+            "y": 0,
+            "z": 0,
+            "sequence": 7,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_7",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_8",
+            "priority": 2084.0,
+            "weight": 90,
+            "loadCapacity": 83.71,
+            "shape": {
+                "shapeType": "Box",
+                "width": 7,
+                "height": 91,
+                "depth": 11,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 7007
+            },
+            "x": 92,
+            "y": 0,
+            "z": 84,
+            "sequence": 8,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_8",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_9",
+            "priority": 2084.0,
+            "weight": 100,
+            "loadCapacity": 97.16,
+            "shape": {
+                "shapeType": "Box",
+                "width": 40,
+                "height": 4,
+                "depth": 59,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 9440
+            },
+            "x": 53,
+            "y": 96,
+            "z": 0,
+            "sequence": 9,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_9",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_10",
+            "priority": 2084.0,
+            "weight": 20,
+            "loadCapacity": 16.25,
+            "shape": {
+                "shapeType": "Box",
+                "width": 2,
+                "height": 33,
+                "depth": 4,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 264
+            },
+            "x": 84,
+            "y": 0,
+            "z": 95,
+            "sequence": 10,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_10",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_11",
+            "priority": 2084.0,
+            "weight": 90,
+            "loadCapacity": 82.92,
+            "shape": {
+                "shapeType": "Box",
+                "width": 5,
+                "height": 55,
+                "depth": 25,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 6875
+            },
+            "x": 93,
+            "y": 39,
+            "z": 47,
+            "sequence": 11,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_11",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_12",
+            "priority": 2084.0,
+            "weight": 70,
+            "loadCapacity": 63.97,
+            "shape": {
+                "shapeType": "Box",
+                "width": 2,
+                "height": 93,
+                "depth": 22,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 4092
+            },
+            "x": 96,
+            "y": 0,
+            "z": 0,
+            "sequence": 12,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_12",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        },
+        {
+            "itemLabel": "Class_3_Instance_45_ULD_0_13",
+            "priority": 2084.0,
+            "weight": 60,
+            "loadCapacity": 55.5,
+            "shape": {
+                "shapeType": "Box",
+                "width": 35,
+                "height": 22,
+                "depth": 4,
+                "rotationState": 0,
+                "id": 2025,
+                "volume": 3080
+            },
+            "x": 53,
+            "y": 77,
+            "z": 95,
+            "sequence": 13,
+            "packingSequence": null,
+            "floorLoad": 0.0,
+            "forkliftCapableDirections": "XZ",
+            "shipmentLabel": "Class_3_Instance_45_ULD_0_13",
+            "centerOfMass": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "id": 2024,
+            "rotationAxes": "XYZ"
+        }
+    ],
+    "id": 1,
+    "properties": {
+        "palletLabel": "Class_3",
+        "contourLabel": "Class_3",
+        "iataCode": "None",
+        "description": "",
+        "standardWeight": 121,
+        "maxWeight": 6804,
+        "certified": true,
+        "extensionWidth": 0,
+        "extensionHeight": 0,
+        "extensionMaxWeight": 0,
+        "width": 100,
+        "depth": 100,
+        "maxHeight": 100,
+        "uldType": "Cuboid",
+        "generalPackingSides": [
+            "FRONT",
+            "LEFT",
+            "RIGHT",
+            "BACK"
+        ],
+        "forkliftPackingSides": [
+            "FRONT",
+            "LEFT",
+            "RIGHT"
+        ]
+    }
+}
