@@ -14,10 +14,10 @@ class Uld:
                                      json_uld['properties']["depth"] / 100 / 2,
                                      uld_height / 2])
         uld_position = np.zeros(3) + uld_half_extents
-        uld_mass = json_uld['properties']['standardWeight']
+        self.uld_mass = json_uld['properties']['standardWeight']
         uld_color = uld_color
-        self.body = Box(uld_half_extents, uld_position, [0, 0, 0], uld_mass, uld_color)
-
+        self.body = Box(uld_half_extents, uld_position, [0, 0, 0], self.uld_mass, uld_color)
+        self.total_weight = json_uld['properties']['standardWeight']
         self.items = []
         for item in json_uld["placedItems"]:
             item_half_extents = np.array([
@@ -28,4 +28,5 @@ class Uld:
             item_start_position = np.array(
                 [item['x'], item['z'], item['y'] + uld_height*100]) / 100 + item_half_extents
             item_mass = item['weight']
+            self.total_weight += item_mass
             self.items.append(Box(item_half_extents, item_start_position, [0, 0, 0], item_mass, color.create_random()))
