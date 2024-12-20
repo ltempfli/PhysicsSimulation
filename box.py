@@ -54,6 +54,4 @@ class Box:
 
     def print_velocity(self) -> None:
         linear_velocity, angular_velocity = p.getBaseVelocity(self.id)
-
-        # Print linear velocity
         print(f"Linear Velocity: {linear_velocity}")
