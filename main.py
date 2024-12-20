@@ -3,9 +3,9 @@ import pybullet_data
 import time
 from typing import Final
 
-from util.calculate_force import calculate_force_and_acceleration
-from util.move_camera import move_camera
-from uld import Uld
+from physic_engine.calculate_force import calculate_force_and_acceleration
+from physic_engine.move_camera import move_camera
+from model.uld import Uld
 
 FRICTION: Final = 0.3
 
@@ -17,7 +17,7 @@ plane_id = p.loadURDF("plane.urdf")
 
 p.changeDynamics(plane_id, -1, lateralFriction=FRICTION)
 
-uld = Uld('H1_Class_3_Instance_45_ULD_0.json', scaling_factor=0.02)
+uld = Uld('data/uld_loading_patterns/H1_Class_3_Instance_45_ULD_0.json', scaling_factor=0.02)
 uld_id = uld.body.render()
 for item in uld.items:
     item.render()
