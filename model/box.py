@@ -1,3 +1,5 @@
+from turtledemo.penrose import start
+
 import pybullet as p
 
 class Box:
@@ -6,12 +8,16 @@ class Box:
                  start_position: list = (0, 0, 0.5),
                  rotation: list = (0, 0, 0),
                  mass: int = 10,
-                 color: list = (1,0,0,1)):
+                 color: list = (1,0,0,1),
+                 scaling_factor = 1.0,
+                 friction = None):
         self.half_extents = half_extends
         self.start_position = start_position
         self.rotation = rotation
         self.mass = mass
         self.color = color
+        self.scaling_factor = scaling_factor
+        self.friction = friction
         self.id = None
 
     def render(self) -> int:
@@ -28,30 +34,26 @@ class Box:
             basePosition=self.start_position,
             baseOrientation=p.getQuaternionFromEuler(self.rotation),
         )
-        p.changeDynamics(object_id, -1 , lateralFriction=0.5)
+        p.changeDynamics(object_id, -1 , lateralFriction=self.friction)
         self.id = object_id
         return object_id
 
-
-
+    def has_fallen(self):
+        return abs(self.start_position[2] - self.get_position()[2]) > 1 * self.scaling_factor
 
     def stringify(self) -> str:
         return (f"Box(half_extents={self.half_extents}, start_position={self.start_position}, "
                 f"rotation={self.rotation}, mass={self.mass}, color={self.color})")
 
-    def print_friction(self) -> None:
+    def get_friction(self) -> float:
         dynamics_info = p.getDynamicsInfo(self.id, -1)
-        print(dynamics_info)
-        # Extract friction values
         lateral_friction = dynamics_info[1]
+        return lateral_friction
 
-        # Print results
-        print(f"Lateral Friction: {lateral_friction}")
-
-    def print_position(self) -> None:
+    def get_position(self) -> list:
         position, orientation = p.getBasePositionAndOrientation(self.id)
-        print(f"position of {self.id} : x:{position[0]} y:{position[1]} z:{position[2]}")
+        return [position[0], position[1], position[2]]
 
     def print_velocity(self) -> None:
         linear_velocity, angular_velocity = p.getBaseVelocity(self.id)
-        print(f"Linear Velocity: {linear_velocity}")
+        return linear_velocity
