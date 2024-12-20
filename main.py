@@ -10,14 +10,13 @@ force_direction_vectors = [
     [0, 0, 1],
     [-1, 0, 0],
     [0, -1, 0],
-    [0, 0, -1],
 ]
 
 def run_simulation(args):
     file_path, direction = args
     nfb, nfb_rel = simulate(file_path,
                             duration=10,
-                            max_g_force=10,
+                            max_g_force=20,
                             force_duration=2,
                             force_direction_vector=direction,
                             ground_friction=0.8,
