@@ -1,5 +1,3 @@
-from turtledemo.penrose import start
-
 import pybullet as p
 
 class Box:
