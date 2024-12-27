@@ -32,7 +32,7 @@ class Box:
             basePosition=self.start_position,
             baseOrientation=p.getQuaternionFromEuler(self.rotation),
         )
-        p.changeDynamics(object_id, -1 , lateralFriction=self.friction)
+        p.changeDynamics(object_id, -1 , lateralFriction=self.friction, linearDamping= 0)
         self.id = object_id
         return object_id
 
@@ -52,6 +52,19 @@ class Box:
         position, orientation = p.getBasePositionAndOrientation(self.id)
         return [position[0], position[1], position[2]]
 
-    def print_velocity(self) -> None:
+    def get_velocity(self) -> None:
         linear_velocity, angular_velocity = p.getBaseVelocity(self.id)
         return linear_velocity
+
+    def print_velocity(self) -> None:
+        linear_velocity, angular_velocity = p.getBaseVelocity(self.id)
+        print(linear_velocity)
+
+    def print_friction(self) -> None:
+        dynamics_info = p.getDynamicsInfo(self.id, -1)
+        lateral_friction = dynamics_info[1]
+        print(lateral_friction)
+
+    def print_position(self) -> None:
+        position, orientation = p.getBasePositionAndOrientation(self.id)
+        print([position[0], position[1], position[2]])

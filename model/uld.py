@@ -3,6 +3,7 @@ import json
 import numpy as np
 import util.color as color
 from model.box import Box
+import pybullet as p
 
 
 class Uld:
@@ -43,3 +44,7 @@ class Uld:
             if item.has_fallen():
                 nfb_counter += 1
         return nfb_counter, nfb_counter/len(self.items)
+
+    def get_velocity(self) -> list:
+        linear_velocity, angular_velocity = p.getBaseVelocity(self.body.id)
+        return linear_velocity[0]

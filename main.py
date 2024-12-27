@@ -1,6 +1,8 @@
 import os
 import multiprocessing
 from simulation.simulation import simulate
+import plotly.express as px
+import numpy as np
 
 loading_pattern_directory = "./data/uld_loading_patterns/"
 
@@ -14,20 +16,23 @@ force_direction_vectors = [
 
 def run_simulation(args):
     file_path, direction = args
-    nfb, nfb_rel = simulate(file_path,
-                            duration=10,
-                            max_g_force=10,
-                            force_duration=2,
+    nfb, nfb_rel, acceleration_traj = simulate(file_path,
+                            duration=4,
+                            max_g_force=0.1,
+                            force_duration=3,
                             force_direction_vector=direction,
-                            ground_friction=0.8,
+                            ground_friction=1,
                             uld_friction=0.5,
-                            item_friction=0.3,
+                            item_friction=0.8,
                             scaling_factor=0.02,
-                            visual_simulation=False)
+                            visual_simulation=True)
     print("File: {}. Direction: {}, NFB: {}, NFB_rel: {}".format(file_path, direction, nfb, nfb_rel))
 
+    return nfb, nfb_rel, acceleration_traj
+
 if __name__ == "__main__":
-    max_workers = 8
+    """
+    max_workers = 1
     pool = multiprocessing.Pool(processes=max_workers)
 
     tasks = []
@@ -39,3 +44,12 @@ if __name__ == "__main__":
     pool.map(run_simulation, tasks)
     pool.close()
     pool.join()
+    """
+    nfb, nfb_rel, acceleration_traj = run_simulation((loading_pattern_directory+'H1_Class_3_Instance_45_ULD_0.json', [1, 0, 0]))
+
+    print(nfb)
+
+    fig = px.line(y=acceleration_traj, x=np.arange(4 * 240 - 1), title='Simple Line Graph')
+
+    # Show the graph
+    fig.show()
