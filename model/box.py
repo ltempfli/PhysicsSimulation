@@ -32,7 +32,9 @@ class Box:
             basePosition=self.start_position,
             baseOrientation=p.getQuaternionFromEuler(self.rotation),
         )
-        p.changeDynamics(object_id, -1 , lateralFriction=self.friction, linearDamping= 0)
+        p.changeDynamics(object_id, -1 , lateralFriction=self.friction,
+                         linearDamping= 0
+                         )
         self.id = object_id
         return object_id
 

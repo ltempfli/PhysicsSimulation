@@ -21,6 +21,8 @@ def simulate(file_path=None,
     else:
         p.connect(p.DIRECT)
 
+    p.setPhysicsEngineParameter(numSolverIterations=300)
+
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
     p.setGravity(0, 0, -9.80665)
@@ -34,13 +36,14 @@ def simulate(file_path=None,
     for item in uld.items:
         item.render()
 
-    position, _ = p.getBasePositionAndOrientation(uld_id)
+
 
     velocity = []
 
     for i in range(240 * duration):
-        if 240 <= i <= 240 * force_duration:  # wait one second before force is applied
-            force = calculate_force_and_acceleration(uld_friction, uld.total_weight, force_direction_vector, i,
+        if 240 <= i:  # wait one second before force is applied
+            position, _ = p.getBasePositionAndOrientation(uld_id)
+            force = calculate_force(uld_friction * ground_friction, uld.total_weight, force_direction_vector, i - 240,
                                                         max_g_force, force_duration)
             p.applyExternalForce(uld_id, -1, force, position, p.WORLD_FRAME)
         move_camera(uld_id)
@@ -53,13 +56,10 @@ def simulate(file_path=None,
     return nfb, nfb_rel, calculate_acceleration(velocity)
 
 
-def calculate_force_and_acceleration(friction: float, mass: float, direction_vector: list, elapsed_seconds: int,
+def calculate_force(friction: float, mass: float, direction_vector: list, elapsed_seconds: int,
                                      max_g_force: float, apply_force_seconds: int ) -> np.array:
-
     acceleration = max_g_force * 9.80665
-    force = mass * acceleration + friction * mass * 9.80665
-    sinusoidal_force = force * np.sin(np.pi * (elapsed_seconds/ (apply_force_seconds * 240)))
-    print(sinusoidal_force)
+    sinusoidal_force = mass * acceleration * np.sin(np.pi * (elapsed_seconds/ (apply_force_seconds * 240))) + friction * mass * 9.80665
     return np.array(direction_vector) * sinusoidal_force
 
 
@@ -76,3 +76,5 @@ def calculate_acceleration(linear_velocity: list) -> list:
         )
     print(acceleration)
     return acceleration
+
+

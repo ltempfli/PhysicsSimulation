@@ -18,12 +18,12 @@ def run_simulation(args):
     file_path, direction = args
     nfb, nfb_rel, acceleration_traj = simulate(file_path,
                             duration=4,
-                            max_g_force=0.1,
+                            max_g_force=0.03,
                             force_duration=3,
                             force_direction_vector=direction,
                             ground_friction=1,
                             uld_friction=0.5,
-                            item_friction=0.8,
+                            item_friction=10,
                             scaling_factor=0.02,
                             visual_simulation=True)
     print("File: {}. Direction: {}, NFB: {}, NFB_rel: {}".format(file_path, direction, nfb, nfb_rel))
