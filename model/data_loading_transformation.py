@@ -91,5 +91,25 @@ def rotate_uld_right(uld_dict: dict, degree: int) -> dict:
                                      for item in uld_dict["items"]]
     return rotated_uld_dict
 
-def mirror_uld_horizontal(uld_data: dict) -> dict:
-    return {}
+def mirror_uld_horizontal(uld_dict: dict) -> dict:
+
+    mirrored_uld_dict = {}
+
+    uld_width = uld_dict["uld_half_extents"][0] * 2
+
+    mirrored_uld_dict["uld_half_extents"] = uld_dict["uld_half_extents"]
+    mirrored_uld_dict["uld_position"] = np.zeros(3) + mirrored_uld_dict["uld_half_extents"]
+    mirrored_uld_dict["uld_mass"] = uld_dict["uld_mass"]
+    mirrored_uld_dict["total_weight"] = uld_dict["total_weight"]
+    mirrored_uld_dict["items"] = [{
+        "item_half_extents": item["item_half_extents"],
+        "item_start_position": np.array([
+            uld_width - item["item_start_position"][0],
+            item["item_start_position"][1],
+            item["item_start_position"][2]
+        ]),
+        "item_mass": item["item_mass"]
+    }
+        for item in uld_dict["items"]]
+
+    return mirrored_uld_dict
