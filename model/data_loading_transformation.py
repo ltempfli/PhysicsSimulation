@@ -36,8 +36,60 @@ def extract_data(data_batch: int, file_path: str, scaling_factor: float, uld_hei
 
     return uld_dict
 
-def rotate_uld(uld_data: dict, degree: int) -> dict:
-    return {}
+def rotate_uld_right(uld_dict: dict, degree: int) -> dict:
+    rotated_uld_dict = {}
+
+    uld_width = uld_dict["uld_half_extents"][0] *2
+    uld_depth = uld_dict["uld_half_extents"][1]* 2
+
+    if degree == 90 or degree == 270:
+        rotated_uld_dict["uld_half_extents"] = np.array([uld_dict["uld_half_extents"][1], uld_dict["uld_half_extents"][0], uld_dict["uld_half_extents"][2]])
+    else:
+        rotated_uld_dict["uld_half_extents"] = uld_dict["uld_half_extents"]
+
+    rotated_uld_dict["uld_position"] = np.zeros(3) + rotated_uld_dict["uld_half_extents"]
+    rotated_uld_dict["uld_mass"] = uld_dict["uld_mass"]
+    rotated_uld_dict["total_weight"] = uld_dict["total_weight"]
+
+    if degree == 90:
+        rotated_uld_dict["items"] = [{"item_half_extents": np.array([
+                                          item["item_half_extents"][1],
+                                          item["item_half_extents"][0],
+                                          item["item_half_extents"][2],
+                                      ]),
+                                      "item_start_position": np.array([
+                                          item["item_start_position"][1],
+                                          uld_width -item["item_start_position"][0],
+                                          item["item_start_position"][2]
+                                      ]),
+                                      "item_mass": item["item_mass"]
+                                      }
+                                     for item in uld_dict["items"]]
+    elif degree == 180:
+        rotated_uld_dict["items"] = [{"item_half_extents": item["item_half_extents"],
+                                      "item_start_position": np.array([
+                                          uld_width -item["item_start_position"][0],
+                                          uld_depth -item["item_start_position"][1],
+                                          item["item_start_position"][2]
+                                      ]),
+                                      "item_mass": item["item_mass"]
+                                      }
+                                     for item in uld_dict["items"]]
+    elif degree == 270:
+        rotated_uld_dict["items"] = [{"item_half_extents": np.array([
+                                          item["item_half_extents"][1],
+                                          item["item_half_extents"][0],
+                                          item["item_half_extents"][2],
+                                      ]),
+                                      "item_start_position": np.array([
+                                          uld_depth- item["item_start_position"][1],
+                                          item["item_start_position"][0],
+                                          item["item_start_position"][2]
+                                      ]),
+                                      "item_mass": item["item_mass"]
+                                      }
+                                     for item in uld_dict["items"]]
+    return rotated_uld_dict
 
 def mirror_uld_horizontal(uld_data: dict) -> dict:
     return {}

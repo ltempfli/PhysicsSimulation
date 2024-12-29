@@ -3,7 +3,7 @@ import multiprocessing
 from simulation.simulation import simulate
 import plotly.express as px
 import numpy as np
-from model.data_loading_transformation import extract_data
+from model.data_loading_transformation import extract_data, rotate_uld_right
 
 loading_pattern_directory = "./data/uld_loading_patterns/"
 
@@ -18,7 +18,8 @@ force_direction_vectors = [
 def run_simulation(args):
     file_path, direction = args
     uld_dict = extract_data(2, file_path= file_path, scaling_factor= 0.01, uld_height=20)
-    nfb, nfb_rel, acceleration_traj, acceleration_traj_y, acceleration_traj_z = simulate(uld_dict,
+    rotated_uld = rotate_uld_right(uld_dict, 270)
+    nfb, nfb_rel, acceleration_traj, acceleration_traj_y, acceleration_traj_z = simulate(rotated_uld,
                             duration=4,
                             max_g_force=0.2,
                             force_duration=3,
