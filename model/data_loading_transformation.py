@@ -113,3 +113,13 @@ def mirror_uld_horizontal(uld_dict: dict) -> dict:
         for item in uld_dict["items"]]
 
     return mirrored_uld_dict
+
+
+def get_uld_transformations(uld_dict: dict) -> list:
+    uld_list = [uld_dict, mirror_uld_horizontal(uld_dict)]
+    for degree in [90, 180, 270]:
+        rotated_uld = rotate_uld_right(uld_dict, degree)
+        mirrored_uld = mirror_uld_horizontal(rotated_uld)
+        uld_list.append(rotated_uld)
+        uld_list.append(mirrored_uld)
+    return uld_list
