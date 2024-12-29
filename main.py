@@ -3,6 +3,7 @@ import multiprocessing
 from simulation.simulation import simulate
 import plotly.express as px
 import numpy as np
+from model.data_loading_transformation import extract_data
 
 loading_pattern_directory = "./data/uld_loading_patterns/"
 
@@ -16,15 +17,16 @@ force_direction_vectors = [
 
 def run_simulation(args):
     file_path, direction = args
-    nfb, nfb_rel, acceleration_traj, acceleration_traj_y, acceleration_traj_z = simulate(file_path,
+    uld_dict = extract_data(2, file_path= file_path, scaling_factor= 0.01, uld_height=20)
+    nfb, nfb_rel, acceleration_traj, acceleration_traj_y, acceleration_traj_z = simulate(uld_dict,
                             duration=4,
-                            max_g_force=0.5,
+                            max_g_force=0.2,
                             force_duration=3,
                             force_direction_vector=direction,
                             ground_friction=1,
                             uld_friction=0.5,
-                            item_friction=10,
-                            scaling_factor=0.02,
+                            item_friction=0.8,
+                            scaling_factor=0.01,
                             visual_simulation=True)
     print("File: {}. Direction: {}, NFB: {}, NFB_rel: {}".format(file_path, direction, nfb, nfb_rel))
 
@@ -34,19 +36,20 @@ if __name__ == "__main__":
     """
     max_workers = 1
     pool = multiprocessing.Pool(processes=max_workers)
-
+    
     tasks = []
     for filename in os.listdir(loading_pattern_directory):
         file_path = os.path.join(loading_pattern_directory, filename)
         for direction in force_direction_vectors:
             tasks.append((file_path, direction))
 
-    pool.map(run_simulation, tasks)
+    results = pool.map(run_simulation, tasks)
     pool.close()
     pool.join()
     """
-    nfb, nfb_rel, acceleration_traj, acceleration_traj_y, acceleration_traj_z = run_simulation((loading_pattern_directory+'H1_Class_3_Instance_45_ULD_0.json', [1, 0, 0]))
 
+    #nfb, nfb_rel, acceleration_traj, acceleration_traj_y, acceleration_traj_z = run_simulation((loading_pattern_directory+'H1_Class_3_Instance_45_ULD_0.json', [1, 0, 0]))
+    nfb, nfb_rel, acceleration_traj, acceleration_traj_y, acceleration_traj_z = run_simulation((loading_pattern_directory + 'LH8048-28NOV15-FRA-LAX_pmc_md11f_md-5.json', [1, 0, 0]))
     print(nfb)
 
     fig = px.line(y=acceleration_traj, x=np.arange(4 * 240 - 1), title='Simple Line Graph X')
