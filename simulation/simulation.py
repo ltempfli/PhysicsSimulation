@@ -2,6 +2,7 @@ import pybullet as p
 import pybullet_data
 import time
 import numpy as np
+import plotly.express as px
 
 from model.uld import Uld
 
@@ -15,7 +16,8 @@ def simulate(uld_dict=None,
              ground_friction=None,
              uld_friction=None,
              item_friction=None,
-             scaling_factor=None) -> tuple:
+             scaling_factor=None,
+             visualization=-1) -> tuple:
     if visual_simulation:
         p.connect(p.GUI)
     else:
@@ -36,9 +38,7 @@ def simulate(uld_dict=None,
     for item in uld.items:
         item.render()
 
-    velocity_x = []
-    velocity_y = []
-    velocity_z = []
+    velocity = []
 
     for i in range(240 * duration):
         if 240 <= i:  # wait one second before force is applied
@@ -50,14 +50,18 @@ def simulate(uld_dict=None,
 
         move_camera(uld_id)
         p.stepSimulation()
-        velocity_x.append(uld.get_velocity(0))
-        #velocity_y.append(uld.get_velocity(1))
-        #velocity_z.append(uld.get_velocity(2))
+
+        if visualization != -1:
+            velocity.append(uld.get_velocity(visualization))
         #time.sleep(1 / 240)
 
     nfb, nfb_rel = uld.evaluate_nfb()
     p.disconnect()
-    return nfb, nfb_rel, calculate_acceleration(velocity_x), calculate_acceleration(velocity_y), calculate_acceleration(velocity_z)
+
+    if visualization != -1:
+        fig = px.line(y=calculate_acceleration(velocity), x=np.arange(4 * 240 - 1), title='Simple Line Graph X')
+        fig.show()
+    return nfb, nfb_rel
 
 
 def calculate_force(friction: float, mass: float, direction_vector: list, elapsed_seconds: int,

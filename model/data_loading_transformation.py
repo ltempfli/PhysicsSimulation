@@ -36,6 +36,7 @@ def extract_data(data_batch: int, file_path: str, scaling_factor: float, uld_hei
 
     return uld_dict
 
+
 def rotate_uld_right(uld_dict: dict, degree: int) -> dict:
     rotated_uld_dict = {}
 
@@ -90,6 +91,7 @@ def rotate_uld_right(uld_dict: dict, degree: int) -> dict:
                                       }
                                      for item in uld_dict["items"]]
     return rotated_uld_dict
+
 
 def mirror_uld_horizontal(uld_dict: dict) -> dict:
 
