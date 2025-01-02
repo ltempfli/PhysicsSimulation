@@ -2,7 +2,9 @@ import os
 import multiprocessing
 from simulation.simulation import simulate
 import numpy as np
-from model.data_loading_transformation import extract_data, rotate_uld_right, mirror_uld_horizontal, get_uld_transformations
+import time
+from model.data_loading_transformation import extract_data, get_uld_transformations
+import pandas as pd
 
 loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
 
@@ -16,7 +18,7 @@ force_direction_vectors = [
 def run_simulation(args):
     file_path, direction, uld = args
 
-    nfb, nfb_rel = simulate(uld,
+    return simulate(uld,
                             duration=4,
                             max_g_force=0.2,
                             force_duration=3,
@@ -26,15 +28,16 @@ def run_simulation(args):
                             item_friction=0.8,
                             scaling_factor=0.01,
                             visual_simulation=False,
-                            visualization=-1)
-    return nfb, nfb_rel
-
+                            visualization=True,
+                            num_solver_iterations=200,
+                            sim_time_step=240
+                            )
 if __name__ == "__main__":
-
-    max_workers = 1
+    max_workers = 12
     pool = multiprocessing.Pool(processes=max_workers)
     
     tasks = []
+    start = time.time()
     for filename in os.listdir(loading_pattern_directory):
         file_path = os.path.join(loading_pattern_directory, filename)
         uld_dict = extract_data(1, file_path= file_path, scaling_factor= 0.01, uld_height=20)
@@ -47,4 +50,8 @@ if __name__ == "__main__":
     results = pool.map(run_simulation, tasks)
     pool.close()
     pool.join()
-    print(results)
+
+    df = pd.DataFrame(results)
+    df.head()
+    df.to_csv('simulation_results.csv')
+

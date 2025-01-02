@@ -22,10 +22,12 @@ class Uld:
         if len(self.items) == 0:
             return 0, 0
         nfb_counter = 0
+        boxes = []
         for item in self.items:
             if item.has_fallen():
                 nfb_counter += 1
-        return nfb_counter, nfb_counter/len(self.items)
+                boxes.append(item.id)
+        return nfb_counter, nfb_counter/len(self.items), boxes
 
     def get_velocity(self, position: int) -> float:
         linear_velocity, angular_velocity = p.getBaseVelocity(self.body.id)

@@ -17,19 +17,22 @@ def simulate(uld_dict=None,
              uld_friction=None,
              item_friction=None,
              scaling_factor=None,
-             visualization=-1) -> tuple:
+             visualization=False,
+             num_solver_iterations=200,
+             sim_time_step= 240
+             ) -> dict:
+    start = time.time()
     if visual_simulation:
-        p.connect(p.GUI)
+        client_id = p.connect(p.GUI)
     else:
-        p.connect(p.DIRECT)
-
-    p.setPhysicsEngineParameter(numSolverIterations=300)
+        client_id = p.connect(p.DIRECT)
+    p.setPhysicsEngineParameter(numSolverIterations=num_solver_iterations)
 
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
     p.setGravity(0, 0, -9.80665)
     plane_id = p.loadURDF("plane.urdf")
-
+    p.setTimeStep(1/sim_time_step)
     p.changeDynamics(plane_id, -1, lateralFriction=ground_friction)
 
     uld = Uld(uld_dict, scaling_factor=scaling_factor,
@@ -40,34 +43,50 @@ def simulate(uld_dict=None,
 
     velocity = []
 
-    for i in range(240 * duration):
-        if 240 <= i:  # wait one second before force is applied
+    for i in range(sim_time_step * duration):
+        if sim_time_step <= i:  # wait one second before force is applied
 
             com = uld.get_com()
-            force = calculate_force(uld_friction * ground_friction, uld.total_weight, force_direction_vector, i - 240,
-                    max_g_force, force_duration)
+            force = calculate_force(uld_friction * ground_friction, uld.total_weight, force_direction_vector, i - sim_time_step,
+                    max_g_force, force_duration, sim_time_step)
             p.applyExternalForce(uld_id, -1, force, com, p.WORLD_FRAME)
 
         move_camera(uld_id)
         p.stepSimulation()
 
-        if visualization != -1:
-            velocity.append(uld.get_velocity(visualization))
-        #time.sleep(1 / 240)
+        if visualization:
+            velocity.append(uld.get_velocity(abs(np.argmax(force_direction_vector))))
+        #time.sleep(1 / sim_time_step)
 
-    nfb, nfb_rel = uld.evaluate_nfb()
+    nfb, nfb_rel, fallen_boxes = uld.evaluate_nfb()
     p.disconnect()
+    end = time.time()
 
-    if visualization != -1:
-        fig = px.line(y=calculate_acceleration(velocity), x=np.arange(4 * 240 - 1), title='Simple Line Graph X')
+    if visualization:
+        fig = px.line(y=calculate_acceleration(velocity, sim_time_step), x=np.arange(duration * sim_time_step - 1), title='Simple Line Graph')
         fig.show()
-    return nfb, nfb_rel
+    return {"nfb": nfb,
+            "nfb_rel": nfb_rel,
+            "fallen_boxes": fallen_boxes,
+            "force_direction_vector": force_direction_vector,
+            "max_g_force": max_g_force,
+            "item_friction": item_friction,
+            "uld_friction": uld_friction,
+            "simulation_duration": end-start,
+            "uld_half_extents": uld.body.half_extents,
+            "items": [{
+                       "id": item.id,
+                       "start_position": item.start_position,
+                       "hal_extents": item.half_extents,
+                       "mass": item.mass
+                       } for item in uld.items]
+            }
 
 
 def calculate_force(friction: float, mass: float, direction_vector: list, elapsed_seconds: int,
-                                     max_g_force: float, force_duration: int ) -> np.array:
+                                     max_g_force: float, force_duration: int, sim_time_step: int ) -> np.array:
     acceleration = max_g_force * 9.80665
-    sinusoidal_force = mass * acceleration * np.sin(np.pi * (elapsed_seconds/ (force_duration * 240))) + friction * mass * 9.80665
+    sinusoidal_force = mass * acceleration * np.sin(np.pi * (elapsed_seconds/ (force_duration * sim_time_step))) + friction * mass * 9.80665
     return np.array(direction_vector) * sinusoidal_force
 
 
@@ -81,11 +100,11 @@ def move_camera(box_id: int, camera_distance: int = 5) -> None:
     p.resetDebugVisualizerCamera(camera_distance, -30, -45, position)
 
 
-def calculate_acceleration(linear_velocity: list) -> list:
+def calculate_acceleration(linear_velocity: list, sim_time_step: int) -> list:
     acceleration = []
     for i in range(1, len(linear_velocity)):
         acceleration.append(
-            (linear_velocity[i] - linear_velocity[i-1]) / (1 / 240)
+            (linear_velocity[i] - linear_velocity[i-1]) / (1 / sim_time_step)
         )
     return acceleration
 
