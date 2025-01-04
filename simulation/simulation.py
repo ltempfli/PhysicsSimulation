@@ -43,9 +43,17 @@ def simulate(uld_dict=None,
 
     velocity = []
 
-    for i in range(sim_time_step * duration):
-        if sim_time_step <= i:  # wait one second before force is applied
+    nfb: int
+    nfb_rel: int
+    nfb_static: int
+    nfb_rel_static: int
+    fallen_boxes: list
+    fallen_boxes_static: list
 
+    for i in range(sim_time_step * duration):
+        if sim_time_step == i:
+            nfb_static, nfb_rel_static, fallen_boxes_static = uld.evaluate_nfb()
+        if sim_time_step <= i:  # wait one second before force is applies
             com = uld.get_com()
             force = calculate_force(uld_friction * ground_friction, uld.total_weight, force_direction_vector, i - sim_time_step,
                     max_g_force, force_duration, sim_time_step)
@@ -66,8 +74,11 @@ def simulate(uld_dict=None,
         fig = px.line(y=calculate_acceleration(velocity, sim_time_step), x=np.arange(duration * sim_time_step - 1), title='Simple Line Graph')
         fig.show()
     return {"nfb": nfb,
+            "nfb_static": nfb_static,
             "nfb_rel": nfb_rel,
+            "nfb_rel_static": nfb_rel_static,
             "fallen_boxes": fallen_boxes,
+            "fallen_boxes_static": fallen_boxes_static,
             "force_direction_vector": force_direction_vector,
             "max_g_force": max_g_force,
             "item_friction": item_friction,
@@ -77,7 +88,7 @@ def simulate(uld_dict=None,
             "items": [{
                        "id": item.id,
                        "start_position": item.start_position,
-                       "hal_extents": item.half_extents,
+                       "half_extents": item.half_extents,
                        "mass": item.mass
                        } for item in uld.items]
             }
@@ -107,5 +118,3 @@ def calculate_acceleration(linear_velocity: list, sim_time_step: int) -> list:
             (linear_velocity[i] - linear_velocity[i-1]) / (1 / sim_time_step)
         )
     return acceleration
-
-

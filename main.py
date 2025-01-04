@@ -1,7 +1,6 @@
 import os
 import multiprocessing
 from simulation.simulation import simulate
-import numpy as np
 import time
 from model.data_loading_transformation import extract_data, get_uld_transformations
 import pandas as pd
@@ -10,9 +9,9 @@ loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
 
 force_direction_vectors = [
     [1, 0, 0],
-    [0, 1, 0],
-    [-1, 0, 0],
-    [0, -1, 0],
+ #   [0, 1, 0],
+ #   [-1, 0, 0],
+ #   [0, -1, 0],
 ]
 
 def run_simulation(args):
@@ -27,13 +26,13 @@ def run_simulation(args):
                             uld_friction=0.5,
                             item_friction=0.8,
                             scaling_factor=0.01,
-                            visual_simulation=False,
-                            visualization=True,
+                            visual_simulation=True,
+                            visualization=False,
                             num_solver_iterations=200,
                             sim_time_step=240
                             )
 if __name__ == "__main__":
-    max_workers = 12
+    max_workers = 2
     pool = multiprocessing.Pool(processes=max_workers)
     
     tasks = []
@@ -53,5 +52,5 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(results)
     df.head()
-    df.to_csv('simulation_results.csv')
+    df.to_csv('simulation_results.csv', index=False, sep=";")
 

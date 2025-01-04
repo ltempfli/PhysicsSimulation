@@ -33,7 +33,6 @@ class Uld:
         linear_velocity, angular_velocity = p.getBaseVelocity(self.body.id)
         return linear_velocity[position]
 
-
     def get_com(self) -> np.array:
         x_numerator = 0
         y_numerator = 0
