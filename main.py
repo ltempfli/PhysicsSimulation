@@ -9,9 +9,9 @@ loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
 
 force_direction_vectors = [
     [1, 0, 0],
- #   [0, 1, 0],
- #   [-1, 0, 0],
- #   [0, -1, 0],
+    [0, 1, 0],
+    [-1, 0, 0],
+    [0, -1, 0],
 ]
 
 def run_simulation(args):
