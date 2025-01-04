@@ -63,7 +63,8 @@ def simulate(uld_dict=None,
         p.stepSimulation()
 
         if visualization:
-            velocity.append(uld.get_velocity(abs(np.argmax(force_direction_vector))))
+            abs_force_direction_vector = [abs(direction) for direction in force_direction_vector]
+            velocity.append(uld.get_velocity(int(np.argmax(abs_force_direction_vector))))
         #time.sleep(1 / sim_time_step)
 
     nfb, nfb_rel, fallen_boxes = uld.evaluate_nfb()

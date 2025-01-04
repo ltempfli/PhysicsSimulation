@@ -26,8 +26,8 @@ def run_simulation(args):
                             uld_friction=0.5,
                             item_friction=0.8,
                             scaling_factor=0.01,
-                            visual_simulation=True,
-                            visualization=False,
+                            visual_simulation=False,
+                            visualization=True,
                             num_solver_iterations=200,
                             sim_time_step=240
                             )
