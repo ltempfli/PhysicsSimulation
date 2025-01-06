@@ -1,11 +1,14 @@
 import os
 import multiprocessing
-from simulation.simulation import simulate
-import time
-from model.data_loading_transformation import extract_data, get_uld_transformations
 import pandas as pd
+import time
+from simulation.simulation import simulate
+from model.data_loading_transformation import extract_data, get_uld_transformations
+from model.static_stability import is_statically_stable
 
-loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
+# loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
+loading_pattern_directory = "../../asim-data/Data/ULDs/Batch_2"
+static_stability_result_directory = "../../asim-data/Data/Results"
 
 force_direction_vectors = [
     [1, 0, 0],
@@ -27,17 +30,22 @@ def run_simulation(args):
                             item_friction=0.8,
                             scaling_factor=0.01,
                             visual_simulation=False,
-                            visualization=True,
+                            visualization=False,
                             num_solver_iterations=200,
                             sim_time_step=240
                             )
+
+
 if __name__ == "__main__":
-    max_workers = 2
+    max_workers = 3
     pool = multiprocessing.Pool(processes=max_workers)
-    
+
     tasks = []
     start = time.time()
     for filename in os.listdir(loading_pattern_directory):
+        result_file_path = os.path.abspath(static_stability_result_directory + "/Data_2_Ulds_scenario_1_" + filename)
+        if not is_statically_stable(result_file_path):
+            continue
         file_path = os.path.join(loading_pattern_directory, filename)
         uld_dict = extract_data(1, file_path= file_path, scaling_factor= 0.01, uld_height=20)
         uld_list = get_uld_transformations(uld_dict)
@@ -49,6 +57,7 @@ if __name__ == "__main__":
     results = pool.map(run_simulation, tasks)
     pool.close()
     pool.join()
+
 
     df = pd.DataFrame(results)
     df.head()

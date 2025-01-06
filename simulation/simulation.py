@@ -6,7 +6,6 @@ import plotly.express as px
 
 from model.uld import Uld
 
-
 def simulate(uld_dict=None,
              visual_simulation=False,
              duration=None,
