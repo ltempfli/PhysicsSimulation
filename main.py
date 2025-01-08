@@ -2,6 +2,7 @@ import os
 import multiprocessing
 import pandas as pd
 import time
+import csv
 from simulation.simulation import simulate
 from model.data_loading_transformation import extract_data, get_uld_transformations
 from model.static_stability import is_statically_stable
@@ -35,10 +36,10 @@ def run_simulation(args):
                             sim_time_step=240
                             )
 
-
 if __name__ == "__main__":
     max_workers = 3
     pool = multiprocessing.Pool(processes=max_workers)
+    lock = multiprocessing.Manager().Lock()
 
     tasks = []
     start = time.time()
@@ -51,15 +52,21 @@ if __name__ == "__main__":
         uld_list = get_uld_transformations(uld_dict)
         for uld in uld_list:
             for direction in force_direction_vectors:
-
                 tasks.append((file_path, direction, uld))
+    with open('simulation_results.csv', 'a', newline='') as csvfile:
+        fieldnames = ['nfb', 'nfb_static', 'nfb_rel', 'nfb_rel_static', 'fallen_boxes', 'fallen_boxes_static',
+                      'force_direction_vector', 'max_g_force', 'item_friction', 'uld_friction', 'simulation_duration',
+                      'uld_half_extents', 'items']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for result in pool.imap_unordered(run_simulation, [(task, lock) for task in tasks]):
+            pass
 
     results = pool.map(run_simulation, tasks)
     pool.close()
     pool.join()
 
-
     df = pd.DataFrame(results)
     df.head()
     df.to_csv('simulation_results.csv', index=False, sep=";")
-
