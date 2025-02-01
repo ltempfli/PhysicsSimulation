@@ -12,7 +12,7 @@ class Uld:
             uld_color = [0, 0, 0, 1]
 
         self.uld_mass = uld_dict["uld_mass"]
-        self.body = Box(uld_dict["uld_half_extents"].tolist(), uld_dict["uld_position"].tolist(), [0,0,0], self.uld_mass, uld_color, scaling_factor, uld_friction)
+        self.body = Box(uld_dict["uld_half_extents"].tolist(), uld_dict["uld_position"].tolist(), [0,0,0], 0, uld_color, scaling_factor, uld_friction)
         self.total_weight = uld_dict["total_weight"]
         self.scaling_factor = scaling_factor
         self.items = [Box(item["item_half_extents"].tolist(), item["item_start_position"].tolist(), [0, 0, 0], item["item_mass"], color.create_random(), scaling_factor, item_friction)

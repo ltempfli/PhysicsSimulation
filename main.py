@@ -6,8 +6,8 @@ from simulation.simulation import simulate
 from model.data_loading_transformation import extract_data, get_uld_transformations
 from model.static_stability import is_statically_stable
 
-# loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
-loading_pattern_directory = "../../asim-data/Data/ULDs/Batch_2"
+loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
+#loading_pattern_directory = "../../asim-data/Data/ULDs/Batch_2"
 static_stability_result_directory = "../../asim-data/Data/Results"
 
 force_direction_vectors = [
@@ -20,15 +20,15 @@ force_direction_vectors = [
 def run_simulation(args):
     file_path, direction, uld, lock = args
     result = simulate(uld,
-                      duration=4,
+                      duration=15,
                       max_g_force=0.2,
-                      force_duration=3,
+                      force_duration=8,
                       force_direction_vector=direction,
                       ground_friction=1,
                       uld_friction=0.5,
                       item_friction=0.8,
                       scaling_factor=0.01,
-                      visual_simulation=False,
+                      visual_simulation=True,
                       visualization=False,
                       num_solver_iterations=200,
                       sim_time_step=240
@@ -46,7 +46,7 @@ def run_simulation(args):
     return result
 
 if __name__ == "__main__":
-    max_workers = 2
+    max_workers = 1
     pool = multiprocessing.Pool(processes=max_workers)
     lock = multiprocessing.Manager().Lock()
 
@@ -55,7 +55,8 @@ if __name__ == "__main__":
     for filename in os.listdir(loading_pattern_directory):
         result_file_path = os.path.abspath(static_stability_result_directory + "/Data_2_Ulds_scenario_1_" + filename)
         if not is_statically_stable(result_file_path):
-            continue
+            #continue
+            pass
         file_path = os.path.join(loading_pattern_directory, filename)
         uld_dict = extract_data(1, file_path=file_path, scaling_factor=0.01, uld_height=20)
         uld_list = get_uld_transformations(uld_dict)
@@ -69,9 +70,9 @@ if __name__ == "__main__":
                       'uld_half_extents', 'items']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-
-    for result in pool.imap_unordered(run_simulation, tasks):
-        pass
+    print(tasks)
+    print("test")
+    results = pool.map(run_simulation, tasks)
 
     pool.close()
     pool.join()

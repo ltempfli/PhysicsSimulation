@@ -37,6 +37,8 @@ def simulate(uld_dict=None,
     uld = Uld(uld_dict, scaling_factor=scaling_factor,
               uld_friction=uld_friction, item_friction=item_friction)
     uld_id = uld.body.render()
+    uld.body.create_wal()
+    #p.changeDynamics(uld_id, -1, collisionMargin=0.0)
     for item in uld.items:
         item.render()
 
@@ -49,14 +51,21 @@ def simulate(uld_dict=None,
     fallen_boxes: list
     fallen_boxes_static: list
 
+    diff = duration -force_duration
+
     for i in range(sim_time_step * duration):
+        start_step = time.time()
         if sim_time_step == i:
             nfb_static, nfb_rel_static, fallen_boxes_static = uld.evaluate_nfb()
-        if sim_time_step <= i:  # wait one second before force is applies
+        if sim_time_step * diff <= i :  # wait one second before force is applies
             com = uld.get_com()
-            force = calculate_force(uld_friction * ground_friction, uld.total_weight, force_direction_vector, i - sim_time_step,
-                    max_g_force, force_duration, sim_time_step)
-            p.applyExternalForce(uld_id, -1, force, com, p.WORLD_FRAME)
+            #force = calculate_force(uld_friction * ground_friction, uld.total_weight, force_direction_vector, i - sim_time_step * diff,
+            #        max_g_force, force_duration, sim_time_step)
+            #p.applyExternalForce(uld_id, -1, force, com, p.WORLD_FRAME)
+            current_velocity = uld.body.get_velocity()
+            print(current_velocity)
+            velocity = calculate_next_velocity(current_velocity= current_velocity, elapsed_seconds=None, apply_force_seconds=None,step_time=sim_time_step, max_g_force=max_g_force)
+            p.resetBaseVelocity(uld_id, [5,0,0], [0,0,0])
 
         move_camera(uld_id)
         p.stepSimulation()
@@ -64,7 +73,9 @@ def simulate(uld_dict=None,
         if visualization:
             abs_force_direction_vector = [abs(direction) for direction in force_direction_vector]
             velocity.append(uld.get_velocity(int(np.argmax(abs_force_direction_vector))))
-        #time.sleep(1 / sim_time_step)
+        end_step = time.time()
+        step_duration = end_step-start_step
+        #time.sleep(1 / (sim_time_step-step_duration))
 
     nfb, nfb_rel, fallen_boxes = uld.evaluate_nfb()
     p.disconnect()
@@ -104,7 +115,7 @@ def calculate_force(friction: float, mass: float, direction_vector: list, elapse
 def calculate_next_velocity(current_velocity: float, elapsed_seconds: int, apply_force_seconds: int, step_time: int, max_g_force: float)-> float:
     acceleration = max_g_force * 9.80665
     #return current_velocity + np.sin(np.pi * (elapsed_seconds/ (apply_force_seconds * 240))) * acceleration * (1/step_time)
-    return current_velocity + acceleration * (1 / step_time)
+    return np.cucurrent_velocity + acceleration * (1 / step_time)
 
 def move_camera(box_id: int, camera_distance: int = 5) -> None:
     position, orientation = p.getBasePositionAndOrientation(box_id)
