@@ -7,9 +7,9 @@ class Box:
                  start_position: list = (0, 0, 0.5),
                  rotation: list = (0, 0, 0),
                  mass: int = 10,
-                 color: list = (1,0,0,1),
-                 scaling_factor = 1.0,
-                 friction = None):
+                 color: list = (1, 0, 0, 1),
+                 scaling_factor=1.0,
+                 friction=None):
         self.half_extents = half_extends
         self.start_position = start_position
         self.rotation = rotation
@@ -38,70 +38,43 @@ class Box:
         self.id = object_id
         return object_id
 
-    def create_wal(self, width: float = 0.05, margin = 0.05)-> int :
-        shape = [self.half_extents[0],
-                 0.05,
-                 self.half_extents[2] + self.max_height -margin
-                 ]
-        position = [0.5,-0.060,0.5]
-        #back
-        #position[1] = -self.start_position[1]+ width - self.half_extents[1]+0.01
-        position[2] = margin + 0.5
-        #front
-        #position[1] = -self.start_position[1] - width
-        #left
-        #position[1] = -self.start_position[0] - width
-        #right
-        #position[1] = -self.start_position[0] - width
-        wall_size = [0.5, 0.05, 0.5]  # Wall with height 0.5, thin width 0.05
-        position_back = [0.5, 1.35, 0.45]
-        parent_position= [0, 0.55, 0.6]
+    def create_walls(self, width: float = 0.05, height: float = None, margin_percent=0.1) -> None:
+        half_extents = self.half_extents
+        start_position = self.start_position
 
-        self.create_constraint(position_back,parent_position, wall_size)
+        if height is None:
+            if half_extents[0] > half_extents[1]:
+                height = half_extents[0]
+            else:
+                height = half_extents[1]
 
-        position_front = [0.5, -1.35, 0.5]
-        parent_position= [0, -0.55, 0.6]
+        # Back Wall
+        wall_size = [half_extents[0], width, height + half_extents[2]]
+        position_back = [start_position[0],
+                         start_position[1] + half_extents[1] + width + margin_percent * half_extents[1],
+                         start_position[2]]
+        parent_position_back = [0, half_extents[1] + width + margin_percent, 0]
+        create_constraint(position_back, parent_position_back, wall_size, self.id)
 
-        self.create_constraint(position_front,parent_position, wall_size)
+        # Front Wall
+        position_front = [start_position[0],
+                          start_position[1] - half_extents[1] - width - margin_percent * half_extents[1],
+                          start_position[2]]
+        parent_position_front = [0, -half_extents[1] - width - margin_percent * half_extents[1], 0]
+        create_constraint(position_front, parent_position_front, wall_size, self.id)
 
-        wall_size = [0.05, 0.6, 0.5]
-        position_left = [0, 0.5, 0.5]
-        parent_position = [-0.55, 0, 0.6]
+        # Left Wall
+        wall_size = [width, half_extents[1], height + half_extents[2]]
+        position_left = [start_position[0] - half_extents[0] - width - margin_percent * half_extents[0],
+                         start_position[1], start_position[2]]
+        parent_position_left = [-half_extents[0] - width - margin_percent * half_extents[0], 0, 0]
+        create_constraint(position_left, parent_position_left, wall_size, self.id)
 
-        self.create_constraint(position_left, parent_position, wall_size)
-
-        wall_size = [0.05, 0.6, 0.5]
-        position_right = [1.35, 0.5, 0.5]
-        parent_position = [0.55, 0, 0.6]
-
-        self.create_constraint(position_right, parent_position, wall_size)
-        return 1
-
-    def create_constraint(self, position: list, parent_position: list, wall_size: list, rotate: bool = False) -> tuple:
-        wall_collision_shape = p.createCollisionShape(p.GEOM_BOX, halfExtents=wall_size)
-        wall_visual_shape = p.createVisualShape(p.GEOM_BOX, halfExtents=wall_size, rgbaColor=[0.8, 0.8, 0.8, 0.2])
-
-        # Create the wall at an initial position
-        wall = p.createMultiBody(baseMass=1,  # Dynamic object
-                                 baseCollisionShapeIndex=wall_collision_shape,
-                                 baseVisualShapeIndex=wall_visual_shape,
-                                 basePosition=position
-                                 )
-        p.changeDynamics(wall, -1, collisionMargin=0.0)
-
-        # Attach the wall to the pallet using a fixed joint
-        constraint_id = p.createConstraint(
-            parentBodyUniqueId=self.id,
-            parentLinkIndex=-1,
-            childBodyUniqueId=wall,
-            childLinkIndex=-1,
-            jointType=p.JOINT_FIXED,
-            jointAxis=[0, 0, 0],  # Not used for fixed joints
-            parentFramePosition=parent_position,
-            childFramePosition=[0, 0, 0])
-
-        return constraint_id, wall
-
+        # Right Wall
+        position_right = [start_position[0] + half_extents[0] + width + margin_percent * half_extents[0],
+                          start_position[1], start_position[2]]
+        parent_position_right = [half_extents[0] + width + margin_percent * half_extents[0], 0, 0]
+        create_constraint(position_right, parent_position_right, wall_size, self.id)
 
     def has_fallen(self):
         return abs(self.start_position[2] - self.get_position()[2]) > 1 * self.scaling_factor
@@ -135,3 +108,28 @@ class Box:
     def print_position(self) -> None:
         position, orientation = p.getBasePositionAndOrientation(self.id)
         print([position[0], position[1], position[2]])
+
+def create_constraint(position: list, parent_position: list, wall_size: list, parent_body_id) -> tuple:
+    wall_collision_shape = p.createCollisionShape(p.GEOM_BOX, halfExtents=wall_size)
+    wall_visual_shape = p.createVisualShape(p.GEOM_BOX, halfExtents=wall_size, rgbaColor=[0.8, 0.8, 0.8, 0.8])
+
+    # Create the wall at an initial position
+    wall = p.createMultiBody(baseMass=1,  # Dynamic object
+                             baseCollisionShapeIndex=wall_collision_shape,
+                             baseVisualShapeIndex=wall_visual_shape,
+                             basePosition=position
+                             )
+    p.changeDynamics(wall, -1, collisionMargin=0.0)
+
+    # Attach the wall to the pallet using a fixed joint
+    constraint_id = p.createConstraint(
+        parentBodyUniqueId=parent_body_id,
+        parentLinkIndex=-1,
+        childBodyUniqueId=wall,
+        childLinkIndex=-1,
+        jointType=p.JOINT_FIXED,
+        jointAxis=[0, 0, 0],  # Not used for fixed joints
+        parentFramePosition=parent_position,
+        childFramePosition=[0, 0, 0])
+
+    return constraint_id, wall

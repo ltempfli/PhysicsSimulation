@@ -37,7 +37,7 @@ def simulate(uld_dict=None,
     uld = Uld(uld_dict, scaling_factor=scaling_factor,
               uld_friction=uld_friction, item_friction=item_friction)
     uld_id = uld.body.render()
-    uld.body.create_wal()
+    uld.body.create_walls(margin_percent=0.01)
     #p.changeDynamics(uld_id, -1, collisionMargin=0.0)
     for item in uld.items:
         item.render()

@@ -27,7 +27,7 @@ def run_simulation(args):
                       ground_friction=1,
                       uld_friction=0.5,
                       item_friction=0.8,
-                      scaling_factor=0.01,
+                      scaling_factor=1.0,
                       visual_simulation=True,
                       visualization=False,
                       num_solver_iterations=200,
@@ -55,7 +55,6 @@ if __name__ == "__main__":
     for filename in os.listdir(loading_pattern_directory):
         result_file_path = os.path.abspath(static_stability_result_directory + "/Data_2_Ulds_scenario_1_" + filename)
         if not is_statically_stable(result_file_path):
-            #continue
             pass
         file_path = os.path.join(loading_pattern_directory, filename)
         uld_dict = extract_data(1, file_path=file_path, scaling_factor=0.01, uld_height=20)
