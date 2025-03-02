@@ -34,8 +34,9 @@ class Box:
             basePosition=self.start_position,
             baseOrientation=p.getQuaternionFromEuler(self.rotation),
         )
-
         self.id = object_id
+        p.changeDynamics(object_id, -1, linearDamping=0)
+
         return object_id
 
     def create_walls(self, width: float = 0.05, height: float = None, margin=0.02) -> None:
@@ -52,30 +53,31 @@ class Box:
         wall_size = [half_extents[0], width, height + half_extents[2]]
         position_back = [start_position[0],
                          start_position[1] + half_extents[1] + width + margin,
-                         start_position[2]]
-        parent_position_back = [0, half_extents[1] + width + margin, 0]
+                         start_position[2] + wall_size[2]]
+        parent_position_back = [0, half_extents[1] + width + margin, wall_size[2]]
         create_constraint(position_back, parent_position_back, wall_size, self.id)
 
         # Front Wall
         position_front = [start_position[0],
                           start_position[1] - half_extents[1] - width - margin,
-                          start_position[2]]
-        parent_position_front = [0, -half_extents[1] - width - margin, 0]
+                          start_position[2] + wall_size[2]]
+        parent_position_front = [0, -half_extents[1] - width - margin, wall_size[2]]
         create_constraint(position_front, parent_position_front, wall_size, self.id)
 
         # Left Wall
         wall_size = [width, half_extents[1], height + half_extents[2]]
         position_left = [start_position[0] - half_extents[0] - width - margin,
-                         start_position[1], start_position[2]]
-        parent_position_left = [-half_extents[0] - width - margin, 0, 0]
+                         start_position[1], start_position[2] + wall_size[2]]
+        parent_position_left = [-half_extents[0] - width - margin, 0, wall_size[2]]
         create_constraint(position_left, parent_position_left, wall_size, self.id)
 
         # Right Wall
         position_right = [start_position[0] + half_extents[0] + width + margin,
-                          start_position[1], start_position[2]]
-        parent_position_right = [half_extents[0] + width + margin, 0, 0]
+                          start_position[1], start_position[2] + wall_size[2]]
+        parent_position_right = [half_extents[0] + width + margin, 0, wall_size[2]]
         create_constraint(position_right, parent_position_right, wall_size, self.id)
 
+        # Ceiling
         wall_size = [half_extents[0], half_extents[1], width]
         position_top = [start_position[0], start_position[1], start_position[2] + 2 * height + 10 * margin]
         parent_position_top = [0, 0, half_extents[2] + 2 * height + margin]
