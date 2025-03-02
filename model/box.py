@@ -38,7 +38,7 @@ class Box:
         self.id = object_id
         return object_id
 
-    def create_walls(self, width: float = 0.05, height: float = None, margin_percent=0.1) -> None:
+    def create_walls(self, width: float = 0.05, height: float = None, margin=0.02) -> None:
         half_extents = self.half_extents
         start_position = self.start_position
 
@@ -51,30 +51,35 @@ class Box:
         # Back Wall
         wall_size = [half_extents[0], width, height + half_extents[2]]
         position_back = [start_position[0],
-                         start_position[1] + half_extents[1] + width + margin_percent * half_extents[1],
+                         start_position[1] + half_extents[1] + width + margin,
                          start_position[2]]
-        parent_position_back = [0, half_extents[1] + width + margin_percent, 0]
+        parent_position_back = [0, half_extents[1] + width + margin, 0]
         create_constraint(position_back, parent_position_back, wall_size, self.id)
 
         # Front Wall
         position_front = [start_position[0],
-                          start_position[1] - half_extents[1] - width - margin_percent * half_extents[1],
+                          start_position[1] - half_extents[1] - width - margin,
                           start_position[2]]
-        parent_position_front = [0, -half_extents[1] - width - margin_percent * half_extents[1], 0]
+        parent_position_front = [0, -half_extents[1] - width - margin, 0]
         create_constraint(position_front, parent_position_front, wall_size, self.id)
 
         # Left Wall
         wall_size = [width, half_extents[1], height + half_extents[2]]
-        position_left = [start_position[0] - half_extents[0] - width - margin_percent * half_extents[0],
+        position_left = [start_position[0] - half_extents[0] - width - margin,
                          start_position[1], start_position[2]]
-        parent_position_left = [-half_extents[0] - width - margin_percent * half_extents[0], 0, 0]
+        parent_position_left = [-half_extents[0] - width - margin, 0, 0]
         create_constraint(position_left, parent_position_left, wall_size, self.id)
 
         # Right Wall
-        position_right = [start_position[0] + half_extents[0] + width + margin_percent * half_extents[0],
+        position_right = [start_position[0] + half_extents[0] + width + margin,
                           start_position[1], start_position[2]]
-        parent_position_right = [half_extents[0] + width + margin_percent * half_extents[0], 0, 0]
+        parent_position_right = [half_extents[0] + width + margin, 0, 0]
         create_constraint(position_right, parent_position_right, wall_size, self.id)
+
+        wall_size = [half_extents[0], half_extents[1], width]
+        position_top = [start_position[0], start_position[1], start_position[2] + 2 * height + 10 * margin]
+        parent_position_top = [0, 0, half_extents[2] + 2 * height + margin]
+        create_constraint(position_top, parent_position_top, wall_size, self.id)
 
     def has_fallen(self):
         return abs(self.start_position[2] - self.get_position()[2]) > 1 * self.scaling_factor
@@ -111,7 +116,7 @@ class Box:
 
 def create_constraint(position: list, parent_position: list, wall_size: list, parent_body_id) -> tuple:
     wall_collision_shape = p.createCollisionShape(p.GEOM_BOX, halfExtents=wall_size)
-    wall_visual_shape = p.createVisualShape(p.GEOM_BOX, halfExtents=wall_size, rgbaColor=[0.8, 0.8, 0.8, 0.8])
+    wall_visual_shape = p.createVisualShape(p.GEOM_BOX, halfExtents=wall_size, rgbaColor=[0.8, 0.8, 0.8, 0.4])
 
     # Create the wall at an initial position
     wall = p.createMultiBody(baseMass=1,  # Dynamic object
