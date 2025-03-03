@@ -107,33 +107,33 @@ class Uld:
         # Back Wall
         wall_size = [half_extents[0] + 2 * width, width, height + half_extents[2]]
         position_back = [start_position[0],
-                         start_position[1] + half_extents[1] + width + margin,
+                         start_position[1] + half_extents[1] + width + margin + 1,
                          start_position[2] + wall_size[2]]
         parent_position_back = [0, half_extents[1] + width + margin, wall_size[2]]
         create_constraint(position_back, parent_position_back, wall_size, self.body.id)
 
         # Front Wall
         position_front = [start_position[0],
-                          start_position[1] - half_extents[1] - width - margin,
+                          start_position[1] - half_extents[1] - width - margin - 1,
                           start_position[2] + wall_size[2]]
         parent_position_front = [0, -half_extents[1] - width - margin, wall_size[2]]
         create_constraint(position_front, parent_position_front, wall_size, self.body.id)
 
         # Left Wall
         wall_size = [width, half_extents[1], height + half_extents[2]]
-        position_left = [start_position[0] - half_extents[0] - width - margin,
+        position_left = [start_position[0] - half_extents[0] - width - margin - 1,
                          start_position[1], start_position[2] + wall_size[2]]
         parent_position_left = [-half_extents[0] - width - margin, 0, wall_size[2]]
         create_constraint(position_left, parent_position_left, wall_size, self.body.id)
 
         # Right Wall
-        position_right = [start_position[0] + half_extents[0] + width + margin,
+        position_right = [start_position[0] + half_extents[0] + width + margin + 1,
                           start_position[1], start_position[2] + wall_size[2]]
         parent_position_right = [half_extents[0] + width + margin, 0, wall_size[2]]
         create_constraint(position_right, parent_position_right, wall_size, self.body.id)
 
         # Ceiling
         wall_size = [half_extents[0], half_extents[1], width]
-        position_top = [start_position[0], start_position[1], start_position[2] + 2 * height + 10 * margin]
+        position_top = [start_position[0], start_position[1], start_position[2] + 2 * height + margin + 1]
         parent_position_top = [0, 0, half_extents[2] + 2 * height + margin]
         create_constraint(position_top, parent_position_top, wall_size, self.body.id)

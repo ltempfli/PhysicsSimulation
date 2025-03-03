@@ -4,7 +4,6 @@ import time
 import csv
 from simulation.simulation import simulate
 from model.data_loading_transformation import extract_data, get_uld_transformations
-from model.static_stability import is_statically_stable
 
 loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
 # loading_pattern_directory = "../../asim-data/Data/ULDs/Batch_2"
@@ -20,16 +19,16 @@ force_direction_vectors = [
 def run_simulation(args):
     file_path, direction, uld, lock = args
     result = simulate(uld,
-                      duration=5,
+                      duration=7,
+                      force_duration=6,
                       max_g_force=2.0,
-                      force_duration=4,
                       force_direction_vector=direction,
                       ground_friction=0.55,
                       uld_friction=0.55,
                       item_friction=0.55,
                       threshold_fb_relative=0.05,
                       visual_simulation=True,
-                      acceleration_graph=False,
+                      acceleration_graph=True,
                       num_solver_iterations=200,
                       sim_time_step=240
                       )

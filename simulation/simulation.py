@@ -30,13 +30,13 @@ def simulate(uld_dict=None,
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
     p.setGravity(0, 0, -9.80665)
-    plane_id = p.loadURDF("plane.urdf")
+    plane_id = p.loadURDF("plane.urdf", globalScaling=10)
     p.setTimeStep(1 / sim_time_step)
     p.changeDynamics(plane_id, -1, lateralFriction=ground_friction)
 
     uld = Uld(uld_dict, uld_friction=uld_friction, item_friction=item_friction)
     uld_id = uld.body.render()
-    uld.create_walls(margin=0.01)
+    uld.create_walls(margin=0.001)
     for item in uld.items:
         item.render()
 
@@ -105,8 +105,18 @@ def simulate(uld_dict=None,
 def calculate_force(friction: float, mass: float, direction_vector: list, elapsed_seconds: int,
                     max_g_force: float, force_duration: int, sim_time_step: int) -> np.array:
     acceleration = max_g_force * 9.80665
-    sinusoidal_force = mass * acceleration * np.sin(
-        np.pi * (elapsed_seconds / (force_duration * sim_time_step))) + friction * mass * 9.80665
+    half_duration = force_duration * sim_time_step // 2
+
+    if elapsed_seconds <= half_duration:
+        # Positive acceleration phase
+        sinusoidal_force = mass * acceleration * np.sin(
+            np.pi * (elapsed_seconds / half_duration)) + friction * mass * 9.80665
+    else:
+        # Negative acceleration phase
+        decel_elapsed_seconds = elapsed_seconds - half_duration
+        sinusoidal_force = -mass * acceleration * np.sin(
+            np.pi * (decel_elapsed_seconds / half_duration)) + friction * mass * 9.80665
+
     return np.array(direction_vector) * sinusoidal_force
 
 
