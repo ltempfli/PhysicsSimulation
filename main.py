@@ -21,14 +21,14 @@ def run_simulation(args):
     file_path, direction, uld, lock = args
     result = simulate(uld,
                       duration=5,
-                      max_g_force=1.0,
+                      max_g_force=2.0,
                       force_duration=4,
                       force_direction_vector=direction,
                       ground_friction=0.55,
                       uld_friction=0.55,
                       item_friction=0.55,
-                      threshold_fb_relative=0.02,
-                      visual_simulation=False,
+                      threshold_fb_relative=0.05,
+                      visual_simulation=True,
                       acceleration_graph=False,
                       num_solver_iterations=200,
                       sim_time_step=240

@@ -36,7 +36,7 @@ def simulate(uld_dict=None,
 
     uld = Uld(uld_dict, uld_friction=uld_friction, item_friction=item_friction)
     uld_id = uld.body.render()
-    uld.create_walls(margin=0.02)
+    uld.create_walls(margin=0.01)
     for item in uld.items:
         item.render()
 
@@ -55,7 +55,7 @@ def simulate(uld_dict=None,
         start_step = time.time()
         if sim_time_step == i:
             nfb_static, nfb_rel_static, fallen_boxes_static = uld.evaluate_nfb(threshold_fb_relative)
-        if sim_time_step * diff <= i:  # wait one second before force is applied
+        if sim_time_step * diff <= i:
             com = uld.get_com()
             force = calculate_force(uld_friction * ground_friction, uld.total_weight, force_direction_vector,
                                     i - sim_time_step * diff,
