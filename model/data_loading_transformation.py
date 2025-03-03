@@ -1,13 +1,16 @@
 import json
 import numpy as np
 
-def extract_data(data_batch: int, file_path: str, scaling_factor: float, uld_height: float) -> dict:
+def extract_data(data_batch: int, file_path: str) -> dict:
     uld_dict = {}
 
     with open(file_path) as file:
         json_uld = json.load(file)
+        width = json_uld['properties']["width"]
+        scaling_factor = 1 / width
+        uld_height = width * 0.2
 
-    if data_batch ==1:
+    if data_batch == 1:
         uld_dict["uld_half_extents"] = np.array([json_uld['properties']["width"] * scaling_factor / 2,
                                      json_uld['properties']["depth"] * scaling_factor / 2,
                                      uld_height * scaling_factor / 2])

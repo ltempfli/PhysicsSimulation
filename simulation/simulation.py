@@ -53,7 +53,7 @@ def simulate(uld_dict=None,
 
     for i in range(sim_time_step * duration):
         start_step = time.time()
-        if sim_time_step == i:
+        if sim_time_step * diff == i:
             nfb_static, nfb_rel_static, fallen_boxes_static = uld.evaluate_nfb(threshold_fb_relative)
         if sim_time_step * diff <= i:
             com = uld.get_com()

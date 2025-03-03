@@ -105,7 +105,7 @@ class Uld:
             return constraint_id, wall
 
         # Back Wall
-        wall_size = [half_extents[0] + 2 * width, width, height + half_extents[2]]
+        wall_size = [half_extents[0], width, height + half_extents[2]]
         position_back = [start_position[0],
                          start_position[1] + half_extents[1] + width + margin + 1,
                          start_position[2] + wall_size[2]]

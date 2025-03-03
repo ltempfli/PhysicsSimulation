@@ -5,8 +5,8 @@ import csv
 from simulation.simulation import simulate
 from model.data_loading_transformation import extract_data, get_uld_transformations
 
-loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
-# loading_pattern_directory = "../../asim-data/Data/ULDs/Batch_2"
+# loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
+loading_pattern_directory = "../../asim-data/Data/ULDs/Batch_2"
 
 force_direction_vectors = [
     [1, 0, 0],
@@ -19,9 +19,9 @@ force_direction_vectors = [
 def run_simulation(args):
     file_path, direction, uld, lock = args
     result = simulate(uld,
-                      duration=7,
-                      force_duration=6,
-                      max_g_force=2.0,
+                      duration=5,
+                      force_duration=4,
+                      max_g_force=1.0,
                       force_direction_vector=direction,
                       ground_friction=0.55,
                       uld_friction=0.55,
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     start = time.time()
     for filename in os.listdir(loading_pattern_directory):
         file_path = os.path.join(loading_pattern_directory, filename)
-        uld_dict = extract_data(1, file_path=file_path, scaling_factor=0.01, uld_height=20)
+        uld_dict = extract_data(1, file_path=file_path)
         uld_list = get_uld_transformations(uld_dict)
         for uld in uld_list:
             for direction in force_direction_vectors:
