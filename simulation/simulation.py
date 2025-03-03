@@ -15,8 +15,8 @@ def simulate(uld_dict=None,
              ground_friction=None,
              uld_friction=None,
              item_friction=None,
-             scaling_factor=None,
-             visualization=False,
+             threshold_fb_relative=None,
+             acceleration_graph=False,
              num_solver_iterations=200,
              sim_time_step=240
              ) -> dict:
@@ -34,11 +34,9 @@ def simulate(uld_dict=None,
     p.setTimeStep(1 / sim_time_step)
     p.changeDynamics(plane_id, -1, lateralFriction=ground_friction)
 
-    uld = Uld(uld_dict, scaling_factor=scaling_factor,
-              uld_friction=uld_friction, item_friction=item_friction)
+    uld = Uld(uld_dict, uld_friction=uld_friction, item_friction=item_friction)
     uld_id = uld.body.render()
-    uld.body.create_walls(margin=0.02)
-    # p.changeDynamics(uld_id, -1, collisionMargin=0.0)
+    uld.create_walls(margin=0.02)
     for item in uld.items:
         item.render()
 
@@ -56,7 +54,7 @@ def simulate(uld_dict=None,
     for i in range(sim_time_step * duration):
         start_step = time.time()
         if sim_time_step == i:
-            nfb_static, nfb_rel_static, fallen_boxes_static = uld.evaluate_nfb()
+            nfb_static, nfb_rel_static, fallen_boxes_static = uld.evaluate_nfb(threshold_fb_relative)
         if sim_time_step * diff <= i:  # wait one second before force is applied
             com = uld.get_com()
             force = calculate_force(uld_friction * ground_friction, uld.total_weight, force_direction_vector,
@@ -67,22 +65,23 @@ def simulate(uld_dict=None,
         move_camera(uld_id)
         p.stepSimulation()
 
-        if visualization:
+        if acceleration_graph:
             abs_force_direction_vector = [abs(direction) for direction in force_direction_vector]
             velocity.append(uld.get_velocity(int(np.argmax(abs_force_direction_vector))))
         end_step = time.time()
         step_duration = end_step - start_step
         time.sleep(1 / (sim_time_step - step_duration))
 
-    nfb, nfb_rel, fallen_boxes = uld.evaluate_nfb()
+    nfb, nfb_rel, fallen_boxes = uld.evaluate_nfb(threshold_fb_relative)
     p.disconnect()
     end = time.time()
 
-    if visualization:
+    if acceleration_graph:
         fig = px.line(y=calculate_acceleration(velocity, sim_time_step), x=np.arange(duration * sim_time_step - 1),
                       title='Simple Line Graph')
         fig.show()
-    return {"nfb": nfb,
+    return {"total_nb": uld.item_count,
+            "nfb": nfb,
             "nfb_static": nfb_static,
             "nfb_rel": nfb_rel,
             "nfb_rel_static": nfb_rel_static,

@@ -8,7 +8,6 @@ from model.static_stability import is_statically_stable
 
 loading_pattern_directory = "./data/uld_loading_patterns/data_1/"
 # loading_pattern_directory = "../../asim-data/Data/ULDs/Batch_2"
-static_stability_result_directory = "../../asim-data/Data/Results"
 
 force_direction_vectors = [
     [1, 0, 0],
@@ -16,6 +15,7 @@ force_direction_vectors = [
     [-1, 0, 0],
     [0, -1, 0],
 ]
+
 
 def run_simulation(args):
     file_path, direction, uld, lock = args
@@ -27,9 +27,9 @@ def run_simulation(args):
                       ground_friction=0.55,
                       uld_friction=0.55,
                       item_friction=0.55,
-                      scaling_factor=1.0,
-                      visual_simulation=True,
-                      visualization=True,
+                      threshold_fb_relative=0.02,
+                      visual_simulation=False,
+                      acceleration_graph=False,
                       num_solver_iterations=200,
                       sim_time_step=240
                       )
@@ -37,10 +37,9 @@ def run_simulation(args):
 
     with lock:
         with open('simulation_results.csv', 'a', newline='') as csvfile:
-            fieldnames = ['filename', 'nfb', 'nfb_static', 'nfb_rel', 'nfb_rel_static', 'fallen_boxes',
-                          'fallen_boxes_static',
-                          'force_direction_vector', 'max_g_force', 'item_friction', 'uld_friction',
-                          'simulation_duration', 'uld_half_extents', 'items']
+            fieldnames = ['filename', 'total_nb', 'nfb', 'nfb_static', 'nfb_rel', 'nfb_rel_static', 'fallen_boxes',
+                          'fallen_boxes_static', 'force_direction_vector', 'max_g_force', 'item_friction',
+                          'uld_friction', 'simulation_duration', 'uld_half_extents', 'items']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writerow(result)
 
@@ -55,9 +54,6 @@ if __name__ == "__main__":
     tasks = []
     start = time.time()
     for filename in os.listdir(loading_pattern_directory):
-        result_file_path = os.path.abspath(static_stability_result_directory + "/Data_2_Ulds_scenario_1_" + filename)
-        if not is_statically_stable(result_file_path):
-            pass
         file_path = os.path.join(loading_pattern_directory, filename)
         uld_dict = extract_data(1, file_path=file_path, scaling_factor=0.01, uld_height=20)
         uld_list = get_uld_transformations(uld_dict)
@@ -66,7 +62,7 @@ if __name__ == "__main__":
                 tasks.append((file_path, direction, uld, lock))
 
     with open('simulation_results.csv', 'w', newline='') as csvfile:
-        fieldnames = ['filename', 'nfb', 'nfb_static', 'nfb_rel', 'nfb_rel_static', 'fallen_boxes',
+        fieldnames = ['filename', 'total_nb', 'nfb', 'nfb_static', 'nfb_rel', 'nfb_rel_static', 'fallen_boxes',
                       'fallen_boxes_static',
                       'force_direction_vector', 'max_g_force', 'item_friction', 'uld_friction', 'simulation_duration',
                       'uld_half_extents', 'items']
