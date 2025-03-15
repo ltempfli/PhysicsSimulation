@@ -70,7 +70,7 @@ def simulate(uld_dict=None,
             velocity.append(uld.get_velocity(int(np.argmax(abs_force_direction_vector))))
         end_step = time.time()
         step_duration = end_step - start_step
-        time.sleep(1 / (sim_time_step - step_duration))
+        # time.sleep(1 / (sim_time_step - step_duration))
 
     nfb, nfb_rel, fallen_boxes = uld.evaluate_nfb(threshold_fb_relative)
     p.disconnect()
@@ -80,6 +80,7 @@ def simulate(uld_dict=None,
         fig = px.line(y=calculate_acceleration(velocity, sim_time_step), x=np.arange(duration * sim_time_step - 1),
                       title='Simple Line Graph')
         fig.show()
+      
     return {"total_nb": uld.item_count,
             "nfb": nfb,
             "nfb_static": nfb_static,
